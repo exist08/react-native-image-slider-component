@@ -1,0 +1,8 @@
+src/
+example/
+.git/
+.gitignore
+tsconfig.json
+*.test.ts
+*.test.tsx
+__tests__/

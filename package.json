@@ -1,0 +1,42 @@
+{
+  "name": "react-native-image-slider-component",
+  "version": "1.0.0",
+  "description": "A lightweight, customizable image slider component for React Native with zero dependencies",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "tsc"
+  },
+  "keywords": [
+    "react-native",
+    "image-slider",
+    "carousel",
+    "image-gallery",
+    "slider",
+    "swiper",
+    "zero-dependency",
+    "lightweight"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/react-native-image-slider-component.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/react-native-image-slider-component/issues"
+  },
+  "homepage": "https://github.com/yourusername/react-native-image-slider-component#readme",
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-native": ">=0.60.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.0",
+    "@types/react-native": "^0.70.0",
+    "react": "^18.2.0",
+    "react-native": "^0.72.0",
+    "typescript": "^5.0.0"
+  }
+}
