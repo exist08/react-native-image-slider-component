@@ -22,12 +22,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/react-native-image-slider-component.git"
+    "url": "https://github.com/exist08/react-native-image-slider-component.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/react-native-image-slider-component/issues"
+    "url": "https://github.com/exist08/react-native-image-slider-component/issues"
   },
-  "homepage": "https://github.com/yourusername/react-native-image-slider-component#readme",
+  "homepage": "https://github.com/exist08/react-native-image-slider-component#readme",
   "peerDependencies": {
     "react": ">=16.8.0",
     "react-native": ">=0.60.0"

@@ -36,8 +36,31 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const react_1 = __importStar(require("react"));
 const react_native_1 = require("react-native");
 const screenWidth = react_native_1.Dimensions.get('window').width;
+const ImageWithLoader = ({ item, height, placeholderBackgroundColor, loaderColor, }) => {
+    const [isLoading, setIsLoading] = (0, react_1.useState)(false);
+    return (<react_native_1.View style={[styles2.container, { height, backgroundColor: placeholderBackgroundColor }]}>
+      {/* Image is always mounted — RN handles its own disk/memory cache */}
+      <react_native_1.Image source={item} style={[styles2.image, { height }]} resizeMode="cover" onLoadStart={() => setIsLoading(true)} onLoadEnd={() => setIsLoading(false)}/>
+      {/* Loader sits on top and disappears once image is ready */}
+      {isLoading && (<react_native_1.View style={styles2.loaderOverlay}>
+          <react_native_1.ActivityIndicator size="large" color={loaderColor}/>
+        </react_native_1.View>)}
+    </react_native_1.View>);
+};
+const styles2 = react_native_1.StyleSheet.create({
+    container: {
+        width: screenWidth,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    image: {
+        width: screenWidth,
+    },
+    loaderOverlay: Object.assign(Object.assign({}, react_native_1.StyleSheet.absoluteFillObject), { justifyContent: 'center', alignItems: 'center' }),
+});
 const ImageSlider = ({ images, onImagePress, height = 220, showNavigationArrows = true, showPlaceholder = true, placeholderBackgroundColor = '#e0e0e0', currentIndex = 0, onIndexChange = () => { }, loaderColor = '#007AFF', leftArrowComponent, rightArrowComponent, arrowContainerStyle, showScrollIndicator = false, }) => {
     const flatListRef = (0, react_1.useRef)(null);
+    const [imageLoading, setImageLoading] = react_1.default.useState(true);
     react_1.default.useEffect(() => {
         if (flatListRef.current && images.length > 0) {
             flatListRef.current.scrollToOffset({
@@ -65,10 +88,7 @@ const ImageSlider = ({ images, onImagePress, height = 220, showNavigationArrows 
     </react_native_1.View>);
     return (<react_native_1.View style={[styles.container, { height }]}>
       <react_native_1.FlatList ref={flatListRef} data={images} renderItem={({ item }) => (<react_native_1.Pressable onPress={onImagePress} style={[styles.sliderImage, { height }]}>
-            {showPlaceholder ? (<react_native_1.ImageBackground source={{}} style={[styles.image, { backgroundColor: placeholderBackgroundColor }]} resizeMode="contain">
-                <react_native_1.ActivityIndicator size="large" color={loaderColor}/>
-                <react_native_1.Image source={item} style={[styles.sliderImage, { height }]}/>
-              </react_native_1.ImageBackground>) : (<react_native_1.Image source={item} style={[styles.sliderImage, { height }]} resizeMode="cover"/>)}
+            {showPlaceholder ? (<ImageWithLoader item={item} height={height} placeholderBackgroundColor={placeholderBackgroundColor} loaderColor={loaderColor}/>) : (<react_native_1.Image source={item} style={[styles.sliderImage, { height }]} resizeMode="cover"/>)}
           </react_native_1.Pressable>)} horizontal pagingEnabled showsHorizontalScrollIndicator={showScrollIndicator} onMomentumScrollEnd={handleScroll} keyExtractor={(_, idx) => idx.toString()}/>
 
       {showNavigationArrows && images.length > 1 && (<>

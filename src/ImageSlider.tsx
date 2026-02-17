@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   View,
   FlatList,
@@ -10,6 +10,60 @@ import {
   ActivityIndicator,
   ViewStyle,
 } from 'react-native';
+
+const screenWidth = Dimensions.get('window').width;
+
+interface ImageWithLoaderProps {
+  item: { uri: string };
+  height: number;
+  placeholderBackgroundColor: string;
+  loaderColor: string;
+}
+
+const ImageWithLoader: React.FC<ImageWithLoaderProps> = ({
+  item,
+  height,
+  placeholderBackgroundColor,
+  loaderColor,
+}) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  return (
+    <View style={[styles2.container, { height, backgroundColor: placeholderBackgroundColor }]}>
+      {/* Image is always mounted — RN handles its own disk/memory cache */}
+      <Image
+        source={item}
+        style={[styles2.image, { height }]}
+        resizeMode="cover"
+        onLoadStart={() => setIsLoading(true)}
+        onLoadEnd={() => setIsLoading(false)}
+      />
+      {/* Loader sits on top and disappears once image is ready */}
+      {isLoading && (
+        <View style={styles2.loaderOverlay}>
+          <ActivityIndicator size="large" color={loaderColor} />
+        </View>
+      )}
+    </View>
+  );
+};
+
+const styles2 = StyleSheet.create({
+  container: {
+    width: screenWidth,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  image: {
+    width: screenWidth,
+  },
+  loaderOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
+
 
 interface ImageSliderProps {
   images: { uri: string }[];
@@ -27,7 +81,6 @@ interface ImageSliderProps {
   showScrollIndicator?: boolean;
 }
 
-const screenWidth = Dimensions.get('window').width;
 
 const ImageSlider: React.FC<ImageSliderProps> = ({
   images,
@@ -37,7 +90,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
   showPlaceholder = true,
   placeholderBackgroundColor = '#e0e0e0',
   currentIndex = 0,
-  onIndexChange = () => {},
+  onIndexChange = () => { },
   loaderColor = '#007AFF',
   leftArrowComponent,
   rightArrowComponent,
@@ -45,6 +98,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
   showScrollIndicator = false,
 }) => {
   const flatListRef = useRef<FlatList>(null);
+  const [imageLoading, setImageLoading] = React.useState(true)
 
   React.useEffect(() => {
     if (flatListRef.current && images.length > 0) {
@@ -87,14 +141,12 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
         renderItem={({ item }) => (
           <Pressable onPress={onImagePress} style={[styles.sliderImage, { height }]}>
             {showPlaceholder ? (
-              <ImageBackground
-                source={{}}
-                style={[styles.image, { backgroundColor: placeholderBackgroundColor }]}
-                resizeMode="contain"
-              >
-                <ActivityIndicator size="large" color={loaderColor} />
-                <Image source={item} style={[styles.sliderImage, { height }]} />
-              </ImageBackground>
+              <ImageWithLoader
+                item={item}
+                height={height}
+                placeholderBackgroundColor={placeholderBackgroundColor}
+                loaderColor={loaderColor}
+              />
             ) : (
               <Image source={item} style={[styles.sliderImage, { height }]} resizeMode="cover" />
             )}
