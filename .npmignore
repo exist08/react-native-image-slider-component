@@ -23,3 +23,15 @@ img_slider.mp4
 img_slider_200.mp4
 img_slider.gif
 img_slider_200.gif
+
+# npm pack artifacts
+
+# Build artifacts that shouldn't be in the package
+node_modules/
+.DS_Store
+npm-debug.log
+# npm pack artifacts - CRITICAL
+*.tgz
+*.tar.gz
+*.tgz
+*.tar.gz
