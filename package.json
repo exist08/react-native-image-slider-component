@@ -1,6 +1,6 @@
 {
   "name": "react-native-image-slider-component",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A lightweight, customizable image slider component for React Native with zero dependencies",
   "main": "index.js",
   "types": "index.d.ts",
