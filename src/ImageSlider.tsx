@@ -26,11 +26,10 @@ const ImageWithLoader: React.FC<ImageWithLoaderProps> = ({
   placeholderBackgroundColor,
   loaderColor,
 }) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   return (
     <View style={[styles2.container, { height, backgroundColor: placeholderBackgroundColor }]}>
-      {/* Image is always mounted — RN handles its own disk/memory cache */}
       <Image
         source={item}
         style={[styles2.image, { height }]}
@@ -38,7 +37,6 @@ const ImageWithLoader: React.FC<ImageWithLoaderProps> = ({
         onLoadStart={() => setIsLoading(true)}
         onLoadEnd={() => setIsLoading(false)}
       />
-      {/* Loader sits on top and disappears once image is ready */}
       {isLoading && (
         <View style={styles2.loaderOverlay}>
           <ActivityIndicator size="large" color={loaderColor} />
@@ -64,7 +62,6 @@ const styles2 = StyleSheet.create({
   },
 });
 
-
 interface ImageSliderProps {
   images: { uri: string }[];
   onImagePress?: () => void;
@@ -79,8 +76,24 @@ interface ImageSliderProps {
   rightArrowComponent?: React.ReactNode;
   arrowContainerStyle?: ViewStyle;
   showScrollIndicator?: boolean;
-}
 
+  // Dot indicators
+  showDots?: boolean;
+  dotColor?: string;
+  activeDotColor?: string;
+  dotSize?: number;
+  dotContainerStyle?: ViewStyle;
+
+  // Auto play
+  autoPlay?: boolean;
+  autoPlayInterval?: number;
+
+  // Loop
+  loop?: boolean;
+
+  // Image resize mode
+  imageResizeMode?: 'cover' | 'contain' | 'stretch' | 'center';
+}
 
 const ImageSlider: React.FC<ImageSliderProps> = ({
   images,
@@ -96,9 +109,26 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
   rightArrowComponent,
   arrowContainerStyle,
   showScrollIndicator = false,
+
+  // Dot indicators
+  showDots = true,
+  dotColor = '#ccc',
+  activeDotColor = '#007AFF',
+  dotSize = 8,
+  dotContainerStyle,
+
+  // Auto play
+  autoPlay = false,
+  autoPlayInterval = 3000,
+
+  // Loop
+  loop = false,
+
+  // Image resize mode
+  imageResizeMode = 'cover',
 }) => {
   const flatListRef = useRef<FlatList>(null);
-  const [imageLoading, setImageLoading] = React.useState(true)
+  const autoPlayTimer = useRef<NodeJS.Timeout | null>(null);
 
   React.useEffect(() => {
     if (flatListRef.current && images.length > 0) {
@@ -109,12 +139,40 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
     }
   }, [currentIndex, images.length]);
 
+  // Auto play functionality
+  React.useEffect(() => {
+    if (autoPlay && images.length > 1) {
+      autoPlayTimer.current = setInterval(() => {
+        const nextIndex = currentIndex + 1;
+        if (nextIndex < images.length) {
+          onIndexChange(nextIndex);
+        } else if (loop) {
+          onIndexChange(0);
+        }
+      }, autoPlayInterval);
+
+      return () => {
+        if (autoPlayTimer.current) {
+          clearInterval(autoPlayTimer.current);
+        }
+      };
+    }
+  }, [autoPlay, currentIndex, images.length, autoPlayInterval, loop, onIndexChange]);
+
   const handleScroll = (e: any) => {
     const { contentOffset } = e.nativeEvent;
     const index = Math.round(contentOffset.x / screenWidth);
     if (index !== currentIndex && index >= 0 && index < images.length) {
       onIndexChange(index);
     }
+  };
+
+  const handleNavigate = (index: number) => {
+    // Reset auto play timer on manual navigation
+    if (autoPlayTimer.current) {
+      clearInterval(autoPlayTimer.current);
+    }
+    onIndexChange(index);
   };
 
   const renderDefaultLeftArrow = () => (
@@ -133,6 +191,11 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
     </View>
   );
 
+  const canGoLeft = currentIndex > 0;
+  const canGoRight = currentIndex < images.length - 1;
+  const showLeftArrow = loop ? images.length > 1 : canGoLeft;
+  const showRightArrow = loop ? images.length > 1 : canGoRight;
+
   return (
     <View style={[styles.container, { height }]}>
       <FlatList
@@ -148,7 +211,11 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
                 loaderColor={loaderColor}
               />
             ) : (
-              <Image source={item} style={[styles.sliderImage, { height }]} resizeMode="cover" />
+              <Image
+                source={item}
+                style={[styles.sliderImage, { height }]}
+                resizeMode={imageResizeMode}
+              />
             )}
           </Pressable>
         )}
@@ -161,23 +228,49 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
 
       {showNavigationArrows && images.length > 1 && (
         <>
-          {currentIndex > 0 && (
+          {showLeftArrow && (
             <Pressable
               style={[styles.navigationArrow, styles.leftArrow, arrowContainerStyle]}
-              onPress={() => onIndexChange(currentIndex - 1)}
+              onPress={() => {
+                const newIndex = currentIndex > 0 ? currentIndex - 1 : (loop ? images.length - 1 : 0);
+                handleNavigate(newIndex);
+              }}
             >
               {leftArrowComponent || renderDefaultLeftArrow()}
             </Pressable>
           )}
-          {currentIndex < images.length - 1 && (
+          {showRightArrow && (
             <Pressable
               style={[styles.navigationArrow, styles.rightArrow, arrowContainerStyle]}
-              onPress={() => onIndexChange(currentIndex + 1)}
+              onPress={() => {
+                const newIndex = currentIndex < images.length - 1 ? currentIndex + 1 : (loop ? 0 : currentIndex);
+                handleNavigate(newIndex);
+              }}
             >
               {rightArrowComponent || renderDefaultRightArrow()}
             </Pressable>
           )}
         </>
+      )}
+
+      {showDots && images.length > 1 && (
+        <View style={[styles.dotsContainer, dotContainerStyle]}>
+          {images.map((_, index: number) => (
+            <Pressable
+              key={index}
+              style={[
+                styles.dot,
+                {
+                  width: dotSize,
+                  height: dotSize,
+                  borderRadius: dotSize / 2,
+                  backgroundColor: index === currentIndex ? activeDotColor : dotColor
+                }
+              ]}
+              onPress={() => handleNavigate(index)}
+            />
+          ))}
+        </View>
       )}
     </View>
   );
@@ -239,6 +332,18 @@ const styles = StyleSheet.create({
     borderTopWidth: 2,
     borderColor: '#333',
     transform: [{ rotate: '45deg' }],
+  },
+  dotsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    bottom: 10,
+    left: 0,
+    right: 0,
+  },
+  dot: {
+    marginHorizontal: 4,
   },
 });
 

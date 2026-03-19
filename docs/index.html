@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary Meta Tags -->
+    <title>React Native Image Slider Component - Zero Dependencies | Lightweight & Customizable</title>
+    <meta name="title" content="React Native Image Slider Component - Zero Dependencies | Lightweight & Customizable">
+    <meta name="description"
+        content="A lightweight, fully customizable React Native image slider with zero dependencies. Support for iOS, Android, Expo. Auto-play, custom arrows, dot indicators, and TypeScript support. Easy to integrate and highly performant.">
+    <meta name="keywords"
+        content="react native, image slider, carousel, react native carousel, image gallery, swiper, react native swiper, zero dependencies, typescript, ios, android, expo, mobile development, react native component">
+    <meta name="author" content="exist08">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="7 days">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://exist08.github.io/react-native-image-slider-component/">
+    <meta property="og:title" content="React Native Image Slider Component - Zero Dependencies">
+    <meta property="og:description"
+        content="A lightweight, fully customizable React Native image slider with zero dependencies. Support for iOS, Android, Expo. Auto-play, custom arrows, dot indicators, and TypeScript support.">
+    <meta property="og:image" content="https://exist08.github.io/react-native-image-slider-component/og-image.png">
+    <meta property="og:site_name" content="React Native Image Slider Component">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://exist08.github.io/react-native-image-slider-component/">
+    <meta property="twitter:title" content="React Native Image Slider Component - Zero Dependencies">
+    <meta property="twitter:description"
+        content="A lightweight, fully customizable React Native image slider with zero dependencies. Support for iOS, Android, Expo.">
+    <meta property="twitter:image" content="https://exist08.github.io/react-native-image-slider-component/og-image.png">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://exist08.github.io/react-native-image-slider-component/">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📸</text></svg>">
+
+    <!-- Structured Data / Schema.org -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "React Native Image Slider Component",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "iOS, Android, Windows, macOS",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "description": "A lightweight, fully customizable React Native image slider component with zero dependencies. Features include auto-play, custom arrows, dot indicators, and TypeScript support.",
+      "softwareVersion": "1.0.2",
+      "downloadUrl": "https://www.npmjs.com/package/react-native-image-slider-component",
+      "author": {
+        "@type": "Person",
+        "name": "exist08",
+        "url": "https://github.com/exist08"
+      },
+      "keywords": "react native, image slider, carousel, mobile development, zero dependencies",
+      "programmingLanguage": "TypeScript, JavaScript",
+      "codeRepository": "https://github.com/exist08/react-native-image-slider-component",
+      "license": "https://opensource.org/licenses/MIT"
+    }
+    </script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #007AFF;
+            --primary-dark: #0051D5;
+            --text: #1d1d1f;
+            --text-secondary: #6e6e73;
+            --bg: #ffffff;
+            --bg-secondary: #f5f5f7;
+            --border: #d2d2d7;
+            --success: #34c759;
+            --radius: 12px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            color: var(--text);
+            line-height: 1.6;
+            background: var(--bg);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 80px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+
+        .hero p {
+            font-size: 24px;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .badges {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+
+        .badge {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        /* Section */
+        section {
+            padding: 80px 0;
+        }
+
+        section h2 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        section .subtitle {
+            text-align: center;
+            font-size: 20px;
+            color: var(--text-secondary);
+            margin-bottom: 60px;
+        }
+
+        /* Features */
+        .features {
+            background: var(--bg-secondary);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .feature-icon {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 24px;
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+        }
+
+        /* Interactive Demo */
+        .demo {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .demo h2 {
+            color: white;
+        }
+
+        .demo .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .demo-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: var(--radius);
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .demo-title {
+            text-align: center;
+            color: var(--text);
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 30px;
+        }
+
+        /* Slider Styles */
+        .slider-wrapper {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+            border-radius: 12px;
+            background: #171b19;
+        }
+
+        .slider-container {
+            display: flex;
+            transition: transform 0.3s ease-in-out;
+            height: 100%;
+        }
+
+        .slider-item {
+            min-width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #e0e0e0;
+        }
+
+        .slider-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .slider-loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+
+            100% {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        .slider-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            border-radius: 20px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 10;
+        }
+
+        .slider-arrow:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .slider-arrow.left {
+            left: 10px;
+        }
+
+        .slider-arrow.right {
+            right: 10px;
+        }
+
+        .slider-arrow svg {
+            width: 24px;
+            height: 24px;
+            display: block;
+        }
+
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            z-index: 10;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ccc;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .dot.active {
+            background: var(--primary);
+            transform: scale(1.3);
+        }
+
+        /* Demo Controls */
+        .demo-controls {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .control-group label {
+            font-weight: 600;
+            color: var(--text);
+            font-size: 14px;
+        }
+
+        .control-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .control-group input[type="number"] {
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        /* Installation */
+        .installation {
+            background: var(--bg);
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .code-block pre {
+            margin: 0;
+            color: #f8f8f2;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Examples */
+        .examples {
+            background: var(--bg-secondary);
+        }
+
+        .example-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            border: 2px solid var(--border);
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Props Table */
+        .props-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .props-table th,
+        .props-table td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .props-table th {
+            background: var(--bg-secondary);
+            font-weight: 700;
+        }
+
+        .props-table code {
+            background: var(--bg-secondary);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: 'Monaco', 'Courier New', monospace;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--text);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero p {
+                font-size: 18px;
+            }
+
+            section h2 {
+                font-size: 32px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .slider-wrapper {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header role="banner">
+        <nav class="container" role="navigation" aria-label="Main navigation">
+            <div class="logo">📸 Image Slider</div>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#demo">Demo</a></li>
+                <li><a href="#installation">Installation</a></li>
+                <li><a href="#examples">Examples</a></li>
+                <li><a href="#props">Props</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" role="region" aria-label="Hero section">
+        <div class="container">
+            <h1>React Native Image Slider Component</h1>
+            <p>A lightweight, customizable slider with zero dependencies</p>
+
+            <div class="badges">
+                <span class="badge">✨ Zero Dependencies</span>
+                <span class="badge">📱 iOS & Android</span>
+                <span class="badge">🎨 Fully Customizable</span>
+                <span class="badge">⚡ Lightweight</span>
+                <span class="badge">🔧 TypeScript</span>
+            </div>
+
+            <div class="cta-buttons">
+                <a href="https://www.npmjs.com/package/react-native-image-slider-component" class="btn btn-primary"
+                    target="_blank">
+                    View on npm
+                </a>
+                <a href="https://github.com/exist08/react-native-image-slider-component" class="btn btn-secondary"
+                    target="_blank">
+                    View on GitHub
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2>Features</h2>
+            <p class="subtitle">Everything you need in an image slider</p>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">✨</div>
+                    <h3>Zero Dependencies</h3>
+                    <p>No external packages required. Smaller bundle size, faster installation, and better security.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3>Fully Customizable</h3>
+                    <p>Bring your own icons from any library. Customize colors, sizes, and styles to match your design.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Cross-Platform</h3>
+                    <p>Works on iOS, Android, Expo, Windows, macOS, tvOS, and visionOS.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Performance</h3>
+                    <p>Built with FlatList for optimal performance and smooth scrolling.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🔧</div>
+                    <h3>TypeScript Support</h3>
+                    <p>Full TypeScript definitions included for better developer experience.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🖼️</div>
+                    <h3>Loading States</h3>
+                    <p>Built-in loading indicators and placeholder support.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3>Auto Play & Loop</h3>
+                    <p>Optional auto-play with customizable intervals and infinite loop support.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">⚙️</div>
+                    <h3>Dot Indicators</h3>
+                    <p>Customizable dot indicators with color and size options.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Demo -->
+    <section id="demo" class="demo">
+        <div class="container">
+            <h2>Interactive Demo</h2>
+            <p class="subtitle">Try it out with live controls</p>
+
+            <div class="demo-container">
+                <h3 class="demo-title">Image Slider Demo</h3>
+
+                <div class="slider-wrapper" id="slider">
+                    <div class="slider-container" id="sliderContainer">
+                        <!-- Images will be inserted here by JavaScript -->
+                    </div>
+
+                    <button class="slider-arrow left" id="prevBtn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </button>
+
+                    <button class="slider-arrow right" id="nextBtn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
+
+                    <div class="slider-dots" id="sliderDots">
+                        <!-- Dots will be inserted here by JavaScript -->
+                    </div>
+                </div>
+
+                <div class="demo-controls">
+                    <div class="control-group">
+                        <label>
+                            <input type="checkbox" id="showArrows" checked> Show Navigation Arrows
+                        </label>
+                    </div>
+
+                    <div class="control-group">
+                        <label>
+                            <input type="checkbox" id="showDots" checked> Show Dot Indicators
+                        </label>
+                    </div>
+
+                    <div class="control-group">
+                        <label>
+                            <input type="checkbox" id="autoPlay"> Enable Auto Play
+                        </label>
+                    </div>
+
+                    <div class="control-group">
+                        <label>
+                            <input type="checkbox" id="loop"> Enable Loop
+                        </label>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="interval">Auto Play Interval (ms)</label>
+                        <input type="number" id="interval" value="3000" min="1000" max="10000" step="500">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Installation -->
+    <section id="installation" class="installation">
+        <div class="container">
+            <h2>Installation</h2>
+            <p class="subtitle">Get started in seconds</p>
+
+            <div class="code-block">
+                <button class="copy-btn"
+                    onclick="copyToClipboard('npm install react-native-image-slider-component')">Copy</button>
+                <pre><code class="language-bash">npm install react-native-image-slider-component</code></pre>
+            </div>
+
+            <p style="text-align: center; margin-bottom: 20px;">or</p>
+
+            <div class="code-block">
+                <button class="copy-btn"
+                    onclick="copyToClipboard('yarn add react-native-image-slider-component')">Copy</button>
+                <pre><code class="language-bash">yarn add react-native-image-slider-component</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Examples -->
+    <section id="examples" class="examples">
+        <div class="container">
+            <h2>Usage Examples</h2>
+            <p class="subtitle">Simple and powerful</p>
+
+            <div class="example-tabs">
+                <button class="tab-btn active" onclick="switchTab('basic')">Basic</button>
+                <button class="tab-btn" onclick="switchTab('custom-arrows')">Custom Arrows</button>
+                <button class="tab-btn" onclick="switchTab('autoplay')">Auto Play</button>
+                <button class="tab-btn" onclick="switchTab('custom-dots')">Custom Dots</button>
+            </div>
+
+            <div id="basic" class="tab-content active">
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode('basic-code')">Copy</button>
+                    <pre><code id="basic-code" class="language-javascript">import React, { useState } from 'react';
+import { ImageSlider } from 'react-native-image-slider-component';
+
+const App = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  
+  const images = [
+    { uri: 'https://picsum.photos/seed/a/600/400' },
+    { uri: 'https://picsum.photos/seed/b/600/400' },
+    { uri: 'https://picsum.photos/seed/c/600/400' },
+  ];
+
+  return (
+    &lt;ImageSlider
+      images={images}
+      currentIndex={currentIndex}
+      onIndexChange={setCurrentIndex}
+      height={300}
+    /&gt;
+  );
+};</code></pre>
+                </div>
+            </div>
+
+            <div id="custom-arrows" class="tab-content">
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode('arrows-code')">Copy</button>
+                    <pre><code id="arrows-code" class="language-javascript">import { ChevronLeft, ChevronRight } from 'lucide-react-native';
+
+&lt;ImageSlider
+  images={images}
+  currentIndex={currentIndex}
+  onIndexChange={setCurrentIndex}
+  leftArrowComponent={&lt;ChevronLeft size={30} color="#fff" /&gt;}
+  rightArrowComponent={&lt;ChevronRight size={30} color="#fff" /&gt;}
+  arrowContainerStyle={{
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    borderRadius: 25,
+    padding: 12,
+  }}
+/&gt;</code></pre>
+                </div>
+            </div>
+
+            <div id="autoplay" class="tab-content">
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode('autoplay-code')">Copy</button>
+                    <pre><code id="autoplay-code" class="language-javascript">&lt;ImageSlider
+  images={images}
+  currentIndex={currentIndex}
+  onIndexChange={setCurrentIndex}
+  autoPlay={true}
+  autoPlayInterval={5000}
+  loop={true}
+  height={300}
+/&gt;</code></pre>
+                </div>
+            </div>
+
+            <div id="custom-dots" class="tab-content">
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode('dots-code')">Copy</button>
+                    <pre><code id="dots-code" class="language-javascript">&lt;ImageSlider
+  images={images}
+  currentIndex={currentIndex}
+  onIndexChange={setCurrentIndex}
+  showDots={true}
+  dotColor="rgba(255,255,255,0.5)"
+  activeDotColor="#ff6b6b"
+  dotSize={10}
+  height={300}
+/&gt;</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Props Documentation -->
+    <section id="props" class="installation">
+        <div class="container">
+            <h2>Props</h2>
+            <p class="subtitle">Complete API reference</p>
+
+            <table class="props-table">
+                <thead>
+                    <tr>
+                        <th>Prop</th>
+                        <th>Type</th>
+                        <th>Default</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>images</code></td>
+                        <td><code>{ uri: string }[]</code></td>
+                        <td><strong>required</strong></td>
+                        <td>Array of images to display</td>
+                    </tr>
+                    <tr>
+                        <td><code>height</code></td>
+                        <td><code>number</code></td>
+                        <td><code>220</code></td>
+                        <td>Height of the slider</td>
+                    </tr>
+                    <tr>
+                        <td><code>currentIndex</code></td>
+                        <td><code>number</code></td>
+                        <td><code>0</code></td>
+                        <td>Current visible image index</td>
+                    </tr>
+                    <tr>
+                        <td><code>onIndexChange</code></td>
+                        <td><code>(index: number) => void</code></td>
+                        <td><code>() => {}</code></td>
+                        <td>Callback when index changes</td>
+                    </tr>
+                    <tr>
+                        <td><code>showNavigationArrows</code></td>
+                        <td><code>boolean</code></td>
+                        <td><code>true</code></td>
+                        <td>Show/hide navigation arrows</td>
+                    </tr>
+                    <tr>
+                        <td><code>showPlaceholder</code></td>
+                        <td><code>boolean</code></td>
+                        <td><code>true</code></td>
+                        <td>Show loading placeholder</td>
+                    </tr>
+                    <tr>
+                        <td><code>placeholderBackgroundColor</code></td>
+                        <td><code>string</code></td>
+                        <td><code>'#e0e0e0'</code></td>
+                        <td>Background color while loading</td>
+                    </tr>
+                    <tr>
+                        <td><code>loaderColor</code></td>
+                        <td><code>string</code></td>
+                        <td><code>'#007AFF'</code></td>
+                        <td>Color of loading indicator</td>
+                    </tr>
+                    <tr>
+                        <td><code>leftArrowComponent</code></td>
+                        <td><code>React.ReactNode</code></td>
+                        <td>Default chevron</td>
+                        <td>Custom left arrow component</td>
+                    </tr>
+                    <tr>
+                        <td><code>rightArrowComponent</code></td>
+                        <td><code>React.ReactNode</code></td>
+                        <td>Default chevron</td>
+                        <td>Custom right arrow component</td>
+                    </tr>
+                    <tr>
+                        <td><code>arrowContainerStyle</code></td>
+                        <td><code>ViewStyle</code></td>
+                        <td>Default style</td>
+                        <td>Custom style for arrow containers</td>
+                    </tr>
+                    <tr>
+                        <td><code>showDots</code></td>
+                        <td><code>boolean</code></td>
+                        <td><code>true</code></td>
+                        <td>Show/hide dot indicators</td>
+                    </tr>
+                    <tr>
+                        <td><code>dotColor</code></td>
+                        <td><code>string</code></td>
+                        <td><code>'#ccc'</code></td>
+                        <td>Color of inactive dots</td>
+                    </tr>
+                    <tr>
+                        <td><code>activeDotColor</code></td>
+                        <td><code>string</code></td>
+                        <td><code>'#007AFF'</code></td>
+                        <td>Color of active dot</td>
+                    </tr>
+                    <tr>
+                        <td><code>dotSize</code></td>
+                        <td><code>number</code></td>
+                        <td><code>8</code></td>
+                        <td>Size of dots in pixels</td>
+                    </tr>
+                    <tr>
+                        <td><code>autoPlay</code></td>
+                        <td><code>boolean</code></td>
+                        <td><code>false</code></td>
+                        <td>Enable auto play</td>
+                    </tr>
+                    <tr>
+                        <td><code>autoPlayInterval</code></td>
+                        <td><code>number</code></td>
+                        <td><code>3000</code></td>
+                        <td>Time between slides (ms)</td>
+                    </tr>
+                    <tr>
+                        <td><code>loop</code></td>
+                        <td><code>boolean</code></td>
+                        <td><code>false</code></td>
+                        <td>Enable infinite loop</td>
+                    </tr>
+                    <tr>
+                        <td><code>imageResizeMode</code></td>
+                        <td><code>'cover' | 'contain' | 'stretch' | 'center'</code></td>
+                        <td><code>'cover'</code></td>
+                        <td>How images should fit</td>
+                    </tr>
+                    <tr>
+                        <td><code>onImagePress</code></td>
+                        <td><code>() => void</code></td>
+                        <td><code>undefined</code></td>
+                        <td>Callback when image is pressed</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 React Native Image Slider Component</p>
+            <p>Made with ❤️ by <a href="https://github.com/exist08" target="_blank">exist08</a></p>
+
+            <div class="footer-links">
+                <a href="https://www.npmjs.com/package/react-native-image-slider-component" target="_blank">npm</a>
+                <a href="https://github.com/exist08/react-native-image-slider-component" target="_blank">GitHub</a>
+                <a href="https://github.com/exist08/react-native-image-slider-component/issues"
+                    target="_blank">Issues</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+
+    <script>
+        // Demo Slider Logic
+        const images = [
+            'https://picsum.photos/seed/a/800/400',
+            'https://picsum.photos/seed/b/800/400',
+            'https://picsum.photos/seed/c/800/400',
+            'https://picsum.photos/seed/d/800/400',
+        ];
+
+        let currentIndex = 0;
+        let autoPlayInterval = null;
+        let config = {
+            showArrows: true,
+            showDots: true,
+            autoPlay: false,
+            loop: false,
+            interval: 3000
+        };
+
+        // Initialize slider
+        function initSlider() {
+            const container = document.getElementById('sliderContainer');
+            const dotsContainer = document.getElementById('sliderDots');
+
+            // Create image slides
+            container.innerHTML = images.map((src, index) => `
+                <div class="slider-item">
+                    <div class="slider-loader" id="loader-${index}"></div>
+                    <img src="${src}" alt="Slide ${index + 1}" onload="hideLoader(${index})" style="opacity: 0;">
+                </div>
+            `).join('');
+
+            // Create dots
+            dotsContainer.innerHTML = images.map((_, index) => `
+                <div class="dot ${index === 0 ? 'active' : ''}" onclick="goToSlide(${index})"></div>
+            `).join('');
+
+            updateSlider();
+        }
+
+        function hideLoader(index) {
+            const loader = document.getElementById(`loader-${index}`);
+            const img = loader.nextElementSibling;
+            if (loader) loader.style.display = 'none';
+            if (img) img.style.opacity = '1';
+        }
+
+        function updateSlider() {
+            const container = document.getElementById('sliderContainer');
+            const dots = document.querySelectorAll('.dot');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const dotsContainer = document.getElementById('sliderDots');
+
+            container.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentIndex);
+            });
+
+            // Handle arrow visibility
+            prevBtn.style.display = config.showArrows ? 'block' : 'none';
+            nextBtn.style.display = config.showArrows ? 'block' : 'none';
+
+            if (!config.loop) {
+                prevBtn.style.opacity = currentIndex === 0 ? '0.3' : '1';
+                prevBtn.style.pointerEvents = currentIndex === 0 ? 'none' : 'auto';
+                nextBtn.style.opacity = currentIndex === images.length - 1 ? '0.3' : '1';
+                nextBtn.style.pointerEvents = currentIndex === images.length - 1 ? 'none' : 'auto';
+            } else {
+                prevBtn.style.opacity = '1';
+                prevBtn.style.pointerEvents = 'auto';
+                nextBtn.style.opacity = '1';
+                nextBtn.style.pointerEvents = 'auto';
+            }
+
+            dotsContainer.style.display = config.showDots ? 'flex' : 'none';
+        }
+
+        function goToSlide(index) {
+            currentIndex = index;
+            updateSlider();
+            stopAutoPlay();
+            if (config.autoPlay) startAutoPlay();
+        }
+
+        function nextSlide() {
+            if (currentIndex < images.length - 1) {
+                currentIndex++;
+            } else if (config.loop) {
+                currentIndex = 0;
+            }
+            updateSlider();
+        }
+
+        function prevSlide() {
+            if (currentIndex > 0) {
+                currentIndex--;
+            } else if (config.loop) {
+                currentIndex = images.length - 1;
+            }
+            updateSlider();
+        }
+
+        function startAutoPlay() {
+            stopAutoPlay();
+            autoPlayInterval = setInterval(() => {
+                if (currentIndex < images.length - 1) {
+                    currentIndex++;
+                } else if (config.loop) {
+                    currentIndex = 0;
+                } else {
+                    stopAutoPlay();
+                    return;
+                }
+                updateSlider();
+            }, config.interval);
+        }
+
+        function stopAutoPlay() {
+            if (autoPlayInterval) {
+                clearInterval(autoPlayInterval);
+                autoPlayInterval = null;
+            }
+        }
+
+        // Event listeners
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            prevSlide();
+            stopAutoPlay();
+            if (config.autoPlay) startAutoPlay();
+        });
+
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            nextSlide();
+            stopAutoPlay();
+            if (config.autoPlay) startAutoPlay();
+        });
+
+        document.getElementById('showArrows').addEventListener('change', (e) => {
+            config.showArrows = e.target.checked;
+            updateSlider();
+        });
+
+        document.getElementById('showDots').addEventListener('change', (e) => {
+            config.showDots = e.target.checked;
+            updateSlider();
+        });
+
+        document.getElementById('autoPlay').addEventListener('change', (e) => {
+            config.autoPlay = e.target.checked;
+            if (config.autoPlay) {
+                startAutoPlay();
+            } else {
+                stopAutoPlay();
+            }
+        });
+
+        document.getElementById('loop').addEventListener('change', (e) => {
+            config.loop = e.target.checked;
+            updateSlider();
+        });
+
+        document.getElementById('interval').addEventListener('change', (e) => {
+            config.interval = parseInt(e.target.value);
+            if (config.autoPlay) {
+                startAutoPlay();
+            }
+        });
+
+        // Tab switching
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        // Copy to clipboard
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = 'Copied!';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        function copyCode(elementId) {
+            const code = document.getElementById(elementId).textContent;
+            copyToClipboard(code);
+        }
+
+        // Initialize on load
+        window.addEventListener('load', () => {
+            initSlider();
+            Prism.highlightAll();
+        });
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

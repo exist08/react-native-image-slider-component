@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://exist08.github.io/react-native-image-slider-component/sitemap.xml
