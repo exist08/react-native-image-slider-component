@@ -19,7 +19,6 @@ A lightweight, customizable image slider component for React Native with **zero 
   </tr>
 </table>
 
-
 ## Features
 
 ✨ Zero dependencies - only requires React Native  
@@ -28,13 +27,18 @@ A lightweight, customizable image slider component for React Native with **zero 
 🔧 TypeScript support  
 ⚡ Lightweight bundle size  
 🖼️ Built-in loading states  
+⏰ Auto-play support with customizable intervals  
+🔄 Infinite loop/carousel mode  
+🎯 Customizable dot indicators  
 
 ## Installation
+
 ```bash
 npm install react-native-image-slider-component
 ```
 
 or
+
 ```bash
 yarn add react-native-image-slider-component
 ```
@@ -42,6 +46,7 @@ yarn add react-native-image-slider-component
 ## Usage
 
 ### Complete Example
+
 ```javascript
 import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
@@ -93,6 +98,7 @@ export default App;
 ```
 
 ### Basic Usage (Minimal)
+
 ```javascript
 import React, { useState } from 'react';
 import { ImageSlider } from 'react-native-image-slider-component';
@@ -122,6 +128,7 @@ const App = () => {
 You can use any icon library you prefer (react-native-vector-icons, @expo/vector-icons, lucide-react-native, etc.)
 
 #### With Lucide React Native
+
 ```javascript
 import { ChevronLeft, ChevronRight } from 'lucide-react-native';
 
@@ -135,6 +142,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react-native';
 ```
 
 #### With React Native Vector Icons
+
 ```javascript
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -148,6 +156,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 ```
 
 #### With Expo Vector Icons
+
 ```javascript
 import { AntDesign } from '@expo/vector-icons';
 
@@ -158,7 +167,50 @@ import { AntDesign } from '@expo/vector-icons';
 />
 ```
 
+### Auto-Play Mode
+
+```javascript
+<ImageSlider
+  images={images}
+  currentIndex={currentIndex}
+  onIndexChange={setCurrentIndex}
+  autoPlay={true}
+  autoPlayInterval={5000} // 5 seconds between slides
+  loop={true} // Enable infinite loop
+  height={300}
+/>
+```
+
+### Custom Dot Indicators
+
+```javascript
+<ImageSlider
+  images={images}
+  currentIndex={currentIndex}
+  onIndexChange={setCurrentIndex}
+  showDots={true}
+  dotColor="rgba(255,255,255,0.5)"
+  activeDotColor="#ff6b6b"
+  dotSize={10}
+  dotContainerStyle={{
+    bottom: 20,
+  }}
+/>
+```
+
+### Without Dots
+
+```javascript
+<ImageSlider
+  images={images}
+  currentIndex={currentIndex}
+  onIndexChange={setCurrentIndex}
+  showDots={false}
+/>
+```
+
 ### Custom Arrow Container Style
+
 ```javascript
 <ImageSlider
   images={images}
@@ -175,6 +227,7 @@ import { AntDesign } from '@expo/vector-icons';
 ```
 
 ### Without Navigation Arrows
+
 ```javascript
 <ImageSlider
   images={images}
@@ -184,7 +237,19 @@ import { AntDesign } from '@expo/vector-icons';
 />
 ```
 
+### Image Resize Modes
+
+```javascript
+<ImageSlider
+  images={images}
+  currentIndex={currentIndex}
+  onIndexChange={setCurrentIndex}
+  imageResizeMode="contain" // 'cover' | 'contain' | 'stretch' | 'center'
+/>
+```
+
 ### With Custom Image Component
+
 ```javascript
 import { Image } from 'react-native';
 
@@ -222,6 +287,28 @@ import { Image } from 'react-native';
 | `rightArrowComponent` | `React.ReactNode` | Default chevron | Custom right arrow component |
 | `arrowContainerStyle` | `ViewStyle` | Default style | Custom style for arrow containers |
 | `showScrollIndicator` | `boolean` | `false` | Show horizontal scroll indicator |
+| `showDots` | `boolean` | `true` | Show/hide dot indicators |
+| `dotColor` | `string` | `'#ccc'` | Color of inactive dots |
+| `activeDotColor` | `string` | `'#007AFF'` | Color of active dot |
+| `dotSize` | `number` | `8` | Size of dots in pixels |
+| `dotContainerStyle` | `ViewStyle` | Default style | Custom style for dot container |
+| `autoPlay` | `boolean` | `false` | Enable automatic slide transitions |
+| `autoPlayInterval` | `number` | `3000` | Time between slides in milliseconds |
+| `loop` | `boolean` | `false` | Enable infinite loop/carousel mode |
+| `imageResizeMode` | `'cover' \| 'contain' \| 'stretch' \| 'center'` | `'cover'` | How images should fit in the container |
+
+## Platform Support
+
+| Platform | Supported |
+|----------|-----------|
+| iOS | ✅ |
+| Android | ✅ |
+| Expo Go | ✅ |
+| Windows | ✅ |
+| macOS | ✅ |
+| tvOS | ✅ |
+| visionOS | ✅ |
+| Web | ❌ |
 
 ## Why Zero Dependencies?
 
@@ -235,6 +322,7 @@ This package has **zero runtime dependencies**, meaning:
 ## Advanced Usage
 
 ### Programmatic Navigation
+
 ```javascript
 const App = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -242,12 +330,16 @@ const App = () => {
   const goToNext = () => {
     if (currentIndex < images.length - 1) {
       setCurrentIndex(currentIndex + 1);
+    } else if (loop) {
+      setCurrentIndex(0);
     }
   };
   
   const goToPrevious = () => {
     if (currentIndex > 0) {
       setCurrentIndex(currentIndex - 1);
+    } else if (loop) {
+      setCurrentIndex(images.length - 1);
     }
   };
   
@@ -257,6 +349,7 @@ const App = () => {
         images={images}
         currentIndex={currentIndex}
         onIndexChange={setCurrentIndex}
+        loop={true}
       />
       <Button title="Previous" onPress={goToPrevious} />
       <Button title="Next" onPress={goToNext} />
@@ -266,6 +359,7 @@ const App = () => {
 ```
 
 ### Image Press Handler
+
 ```javascript
 <ImageSlider
   images={images}
@@ -274,6 +368,33 @@ const App = () => {
     // Navigate to full-screen viewer, open modal, etc.
   }}
 />
+```
+
+### Auto-Play with Pause on Interaction
+
+```javascript
+const App = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [autoPlay, setAutoPlay] = useState(true);
+  
+  const handleIndexChange = (index) => {
+    setCurrentIndex(index);
+    // Temporarily pause auto-play on manual interaction
+    setAutoPlay(false);
+    setTimeout(() => setAutoPlay(true), 5000); // Resume after 5 seconds
+  };
+  
+  return (
+    <ImageSlider
+      images={images}
+      currentIndex={currentIndex}
+      onIndexChange={handleIndexChange}
+      autoPlay={autoPlay}
+      autoPlayInterval={3000}
+      loop={true}
+    />
+  );
+};
 ```
 
 ## Troubleshooting
@@ -288,9 +409,23 @@ const App = () => {
 - Verify you have more than 1 image
 - Check if custom arrow components are rendering correctly
 
+### Dots not showing?
+- Make sure `showDots={true}` (default)
+- Verify you have more than 1 image
+- Check `dotContainerStyle` positioning
+
+### Auto-play not working?
+- Ensure `autoPlay={true}` is set
+- Check that `loop={true}` if you want continuous playback
+- Verify `autoPlayInterval` is set to a reasonable value (minimum 1000ms recommended)
+
 ### TypeScript errors?
 - Ensure you're using TypeScript 4.0+
 - Import types: `import type { ImageSliderProps } from 'react-native-image-slider-component'`
+
+## Examples
+
+Check out the [example](https://github.com/exist08/react-native-image-slider-component/tree/main/example) directory for a complete working example.
 
 ## Contributing
 
@@ -302,16 +437,27 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
+## Changelog
+
+See [CHANGELOG.md](https://github.com/exist08/react-native-image-slider-component/blob/main/CHANGELOG.md) for a list of changes.
+
 ## License
 
 MIT
 
 ## Author
 
-[Your Name](https://github.com/exist08)
+[exist08](https://github.com/exist08)
 
 ## Support
 
 If you like this package, please give it a ⭐️ on [GitHub](https://github.com/exist08/react-native-image-slider-component)!
 
 For issues and feature requests, please use the [GitHub Issues](https://github.com/exist08/react-native-image-slider-component/issues) page.
+
+## Links
+
+- [📦 npm Package](https://www.npmjs.com/package/react-native-image-slider-component)
+- [📖 Documentation](https://exist08.github.io/react-native-image-slider-component/)
+- [🐛 Issues](https://github.com/exist08/react-native-image-slider-component/issues)
+- [🔄 Changelog](https://github.com/exist08/react-native-image-slider-component/blob/main/CHANGELOG.md)
